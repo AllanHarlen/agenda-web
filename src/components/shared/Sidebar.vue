@@ -43,12 +43,48 @@
       />
       <div class="mini-footer">
         <span class="version">Agenda v1.0</span>
-        <a href="#" class="help-link">
+        <a href="#" class="help-link" @click.prevent="helpVisible = true">
           <i class="pi pi-question-circle mr-1"></i>
           Ajuda
         </a>
       </div>
     </div>
+    
+    <Dialog 
+      v-model:visible="helpVisible" 
+      modal 
+      :style="{ width: '520px' }" 
+      :breakpoints="{ '960px': '95vw', '640px': '95vw' }"
+    >
+      <template #header>
+        <div class="help-header">
+          <i class="pi pi-question-circle mr-2"></i>
+          <span>Ajuda rápida</span>
+        </div>
+      </template>
+      <div class="help-content">
+        <div class="help-item">
+          <i class="pi pi-home"></i>
+          <span>Navegue pelo menu para acessar Dashboard e Contatos.</span>
+        </div>
+        <div class="help-item">
+          <i class="pi pi-calendar"></i>
+          <span>No Dashboard, use o seletor de período (Hoje/7/30 dias).
+          Clique em um card para focar a data.</span>
+        </div>
+        <div class="help-item">
+          <i class="pi pi-mouse"></i>
+          <span>Passe o mouse sobre contadores no calendário para ver os eventos do dia.</span>
+        </div>
+        <div class="help-item">
+          <i class="pi pi-sign-out"></i>
+          <span>Use “Sair” para encerrar a sessão com segurança.</span>
+        </div>
+      </div>
+      <template #footer>
+        <Button label="Fechar" class="p-button-text" @click="helpVisible = false" />
+      </template>
+    </Dialog>
   </aside>
   
 </template>
@@ -56,7 +92,7 @@
 <script>
 import { useAuthStore } from '@/stores/authStore'
 import { useRouter } from 'vue-router'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 
 export default {
   name: 'AppSidebar',
@@ -78,7 +114,9 @@ export default {
       return letters.toUpperCase()
     })
 
-    return { authStore, isActive, logout, userInitials }
+    const helpVisible = ref(false)
+
+    return { authStore, isActive, logout, userInitials, helpVisible }
   }
 }
 </script>
@@ -216,6 +254,29 @@ export default {
 
 .mini-footer .help-link:hover {
   text-decoration: underline;
+}
+
+.help-header {
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+}
+
+.help-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.help-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  color: var(--text-secondary);
+}
+
+.help-item i {
+  color: var(--primary-600);
 }
 
 @media (max-width: 992px) {
