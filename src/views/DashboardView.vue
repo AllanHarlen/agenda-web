@@ -1,11 +1,6 @@
 <template>
   <div class="dashboard-view">
     <div class="grid dashboard-grid no-page-scroll">
-      <div class="col-12 mb-2">
-        <Button class="p-button-sm mr-2" icon="pi pi-users" label="Contatos" @click="$router.push('/contatos')" />
-        <Button class="p-button-sm mr-2" icon="pi pi-calendar" label="Agendamentos" @click="$router.push('/agendamentos')" />
-        <Button class="p-button-sm" icon="pi pi-calendar-plus" label="Calendário" @click="$router.push('/calendario')" />
-      </div>
       <div class="col-12 lg:col-9">
         <div class="panel calendar-panel no-border">
           <div class="panel-content no-padding">
