@@ -4,16 +4,16 @@
       <template #content>
         <form @submit.prevent="handleLogin" class="login-form">
           <div class="field">
-            <label for="email">Email</label>
+            <label for="email">Login</label>
             <div class="p-inputgroup">
               <span class="p-inputgroup-addon bg-cyan-50 border-cyan-200">
                 <i class="pi pi-envelope text-cyan-600"></i>
               </span>
               <InputText 
                 id="email"
-                v-model="credentials.email"
+                v-model="credentials.login"
                 type="text"
-                placeholder="Email"
+                placeholder="Login"
                 class="w-full input-lg"
                 :class="{ 'p-invalid': errors.email }"
               />
@@ -80,8 +80,8 @@ export default {
     const toast = useToast()
 
     const credentials = reactive({
-      email: '',
-      senha: ''  // ← ALTERADO de 'password' para 'senha'
+      login: '',
+      senha: ''
     })
 
     const errors = reactive({})
@@ -89,16 +89,16 @@ export default {
     const rememberMe = ref(false)
 
     const validateForm = () => {
-      errors.email = !credentials.email ? 'Email é obrigatório' : ''
-      errors.senha = !credentials.senha ? 'Senha é obrigatória' : ''  // ← ALTERADO
-      return !errors.email && !errors.senha  // ← ALTERADO
+      errors.email = !credentials.login ? 'Login é obrigatório' : ''
+      errors.senha = !credentials.senha ? 'Senha é obrigatória' : ''
+      return !errors.email && !errors.senha
     }
 
     onMounted(() => {
       const savedLogin = localStorage.getItem('login')
       const savedPassword = localStorage.getItem('password')
       if (savedLogin && savedPassword) {
-        credentials.email = savedLogin
+        credentials.login = savedLogin
         credentials.senha = savedPassword
         rememberMe.value = true
       }
@@ -111,7 +111,7 @@ export default {
       try {
         await authStore.login(credentials)
         if (rememberMe.value) {
-          localStorage.setItem('login', credentials.email)
+          localStorage.setItem('login', credentials.login)
           localStorage.setItem('password', credentials.senha)
         } else {
           localStorage.removeItem('login')

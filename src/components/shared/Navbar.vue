@@ -10,6 +10,22 @@
       
       <div class="navbar-menu">
         <template v-if="authStore.isAuthenticated">
+          <router-link to="/dashboard" class="nav-link">
+            <i class="pi pi-home mr-2"></i>
+            <span>Dashboard</span>
+          </router-link>
+          <router-link to="/contatos" class="nav-link">
+            <i class="pi pi-users mr-2"></i>
+            <span>Contatos</span>
+          </router-link>
+          <router-link to="/agendamentos" class="nav-link">
+            <i class="pi pi-calendar mr-2"></i>
+            <span>Agendamentos</span>
+          </router-link>
+          <router-link to="/calendario" class="nav-link">
+            <i class="pi pi-calendar-plus mr-2"></i>
+            <span>Calendário</span>
+          </router-link>
           <span class="user-welcome">
             <i class="pi pi-user mr-2"></i>
             Olá, {{ authStore.user.nome }}

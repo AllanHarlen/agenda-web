@@ -6,6 +6,8 @@ import LoginView from '../views/LoginView.vue'
 import RegisterView from '../views/RegisterView.vue'
 import ContatoListView from '../views/ContatoListView.vue'
 import DashboardView from '../views/DashboardView.vue'
+import AgendamentoListView from '../views/AgendamentoListView.vue'
+import AgendamentoCalendarView from '../views/AgendamentoCalendarView.vue'
 
 const routes = [
   {
@@ -38,6 +40,18 @@ const routes = [
     meta: { requiresAuth: true, title: 'Contatos - Agenda' }
   },
   {
+    path: '/agendamentos',
+    name: 'agendamentos',
+    component: AgendamentoListView,
+    meta: { requiresAuth: true, title: 'Agendamentos - Agenda' }
+  },
+  {
+    path: '/calendario',
+    name: 'calendario',
+    component: AgendamentoCalendarView,
+    meta: { requiresAuth: true, title: 'Calendário - Agenda' }
+  },
+  {
     path: '/:pathMatch(.*)*',
     redirect: '/dashboard'
   }
@@ -59,7 +73,8 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
   const authStore = useAuthStore()
-  const isAuthenticated = authStore.isAuthenticated
+  // Considera sessão persistida no localStorage
+  const isAuthenticated = authStore.isAuthenticated || !!localStorage.getItem('authToken')
 
   if (requiresAuth && !isAuthenticated) {
     next({ name: 'login', query: { redirect: to.fullPath } })

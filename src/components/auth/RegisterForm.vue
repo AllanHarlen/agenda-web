@@ -4,15 +4,15 @@
       <template #content>
         <form @submit.prevent="handleRegister" class="register-form">
           <div class="field">
-            <label for="name">Nome</label>
+            <label for="name">Login</label>
             <div class="p-inputgroup">
               <span class="p-inputgroup-addon bg-cyan-50 border-cyan-200">
                 <i class="pi pi-user text-cyan-600"></i>
               </span>
               <InputText 
                 id="name"
-                v-model="userData.name"
-                placeholder="Seu nome completo"
+                v-model="userData.login"
+                placeholder="Seu login"
                 class="w-full input-lg"
                 :class="{ 'p-invalid': errors.name }"
               />
@@ -20,23 +20,7 @@
             <small v-if="errors.name" class="p-error">{{ errors.name }}</small>
           </div>
 
-          <div class="field">
-            <label for="email">Email</label>
-            <div class="p-inputgroup">
-              <span class="p-inputgroup-addon bg-cyan-50 border-cyan-200">
-                <i class="pi pi-envelope text-cyan-600"></i>
-              </span>
-              <InputText 
-                id="email"
-                v-model="userData.email"
-                type="email"
-                placeholder="Seu email"
-                class="w-full input-lg"
-                :class="{ 'p-invalid': errors.email }"
-              />
-            </div>
-            <small v-if="errors.email" class="p-error">{{ errors.email }}</small>
-          </div>
+          
 
           <div class="field">
             <label for="password">Senha</label>
@@ -122,9 +106,8 @@ export default {
     const toast = useToast()
 
     const userData = reactive({
-      name: '',
-      email: '',
-      password: '',
+      login: '',
+      senha: '',
       confirmPassword: ''
     })
 
@@ -132,10 +115,10 @@ export default {
     const loading = ref(false)
 
     const validateForm = () => {
-      errors.name = !userData.name ? 'Nome é obrigatório' : ''
-      errors.email = !userData.email ? 'Email é obrigatório' : ''
-      errors.password = !userData.password ? 'Senha é obrigatória' : userData.password.length < 6 ? 'Senha deve ter pelo menos 6 caracteres' : ''
-      errors.confirmPassword = userData.password !== userData.confirmPassword ? 'Senhas não coincidem' : ''
+      errors.name = ''
+      errors.email = ''
+      errors.password = !userData.senha ? 'Senha é obrigatória' : userData.senha.length < 6 ? 'Senha deve ter pelo menos 6 caracteres' : ''
+      errors.confirmPassword = userData.senha !== userData.confirmPassword ? 'Senhas não coincidem' : ''
       
       return !errors.name && !errors.email && !errors.password && !errors.confirmPassword
     }
@@ -146,9 +129,8 @@ export default {
       loading.value = true
       try {
         await authStore.register({
-          nome: userData.name,
-          email: userData.email,
-          senha: userData.password
+          login: userData.login,
+          senha: userData.senha
         })
         
         toast.add({

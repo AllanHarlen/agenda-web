@@ -2,13 +2,17 @@
   <div class="contato-list">
     <DataTable 
       :value="contatos" 
-      :paginator="true" 
-      :rows="10"
+      :paginator="true"
+      :lazy="true"
+      :totalRecords="totalItems"
+      :first="(pageNumber - 1) * pageSize"
+      :rows="pageSize"
       :rowsPerPageOptions="[5, 10, 20, 50]"
       paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
       currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} contatos"
       responsiveLayout="scroll"
       :loading="loading"
+      @page="onPage"
     >
       <Column field="nome" header="Nome" :sortable="true">
         <template #body="{ data }">
@@ -66,6 +70,8 @@
       </template>
     </DataTable>
   </div>
+ </DataTable>
+  </div>
 </template>
 
 <script>
@@ -76,12 +82,29 @@ export default {
       type: Array,
       default: () => []
     },
+    totalItems: {
+      type: Number,
+      default: 0
+    },
+    pageNumber: {
+      type: Number,
+      default: 1
+    },
+    pageSize: {
+      type: Number,
+      default: 10
+    },
     loading: {
       type: Boolean,
       default: false
     }
   },
+  emits: ['page-change', 'edit', 'delete'],
   methods: {
+    onPage(event) {
+      // event: { first, rows, page }
+      this.$emit('page-change', { page: event.page, rows: event.rows })
+    },
     formatTelefone(telefone) {
       if (!telefone) return ''
       const cleaned = telefone.replace(/\D/g, '')

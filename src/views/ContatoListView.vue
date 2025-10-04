@@ -107,7 +107,11 @@
           <ContatoList 
             v-else
             :contatos="filteredContatos" 
+            :totalItems="contatoStore.totalItems"
+            :pageNumber="contatoStore.pageNumber"
+            :pageSize="contatoStore.pageSize"
             :loading="loading"
+            @page-change="contatoStore.changePage"
             @edit="editContato" 
             @delete="confirmDelete" 
           />

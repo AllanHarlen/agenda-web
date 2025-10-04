@@ -76,4 +76,9 @@ app.component('Tag', Tag)
 app.component('Avatar', Avatar)
 app.component('SelectButton', SelectButton)
 
+// Inicializa autenticação persistida
+import { useAuthStore } from './stores/authStore'
+const authStore = useAuthStore()
+authStore.initAuth()
+
 app.mount('#app')
