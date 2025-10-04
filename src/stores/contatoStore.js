@@ -24,9 +24,10 @@ export const useContatoStore = defineStore('contato', () => {
         orderByProperty: 'Codg',
         isAscending: true
       })
-      contatos.value = result.contatos || []
-      totalItems.value = result.totalItems || contatos.value.length
-      totalPages.value = result.totalPages || 1
+      const list = Array.isArray(result) ? result : (result?.contatos || [])
+      contatos.value = list
+      totalItems.value = (Array.isArray(result) ? result.length : result?.totalItems) || list.length
+      totalPages.value = (Array.isArray(result) ? 1 : result?.totalPages) || 1
     } catch (err) {
       error.value = err.response?.data?.message || 'Erro ao carregar contatos'
       throw err

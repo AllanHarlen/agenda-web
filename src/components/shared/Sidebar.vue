@@ -23,6 +23,15 @@
         <i class="pi pi-users"></i>
         <span>Contatos</span>
       </router-link>
+
+      <router-link 
+        class="menu-item" 
+        :class="{ active: isActive('/agendamentos') }" 
+        to="/agendamentos"
+      >
+        <i class="pi pi-calendar"></i>
+        <span>Agendamentos</span>
+      </router-link>
     </nav>
 
     <div class="sidebar-footer" v-if="authStore.isAuthenticated">

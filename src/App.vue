@@ -39,13 +39,11 @@ import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useToast } from 'primevue/usetoast'
 import { useAuthStore } from './stores/authStore'
-import Navbar from './components/shared/Navbar.vue'
 import Sidebar from './components/shared/Sidebar.vue'
 
 export default {
   name: 'App',
   components: {
-    Navbar,
     Sidebar
   },
   setup() {

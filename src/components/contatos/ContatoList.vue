@@ -70,8 +70,6 @@
       </template>
     </DataTable>
   </div>
- </DataTable>
-  </div>
 </template>
 
 <script>

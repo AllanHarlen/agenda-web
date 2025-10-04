@@ -358,12 +358,16 @@ export default {
 
     // Lifecycle
     onMounted(async () => {
-      // Verificar autenticação antes de carregar contatos
+      // Garantir sessão inicializada e aceitar token persistido
       if (!authStore.isAuthenticated) {
+        authStore.initAuth()
+      }
+
+      if (!authStore.isAuthenticated && !localStorage.getItem('authToken')) {
         router.push('/login')
         return
       }
-      
+
       await loadContatos()
     })
 
@@ -377,6 +381,7 @@ export default {
       
       // Stores
       authStore,
+      contatoStore,
       
       // Computed
       filteredContatos,
