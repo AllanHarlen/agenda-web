@@ -1,6 +1,7 @@
 import axios from 'axios'
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://localhost:5001'
+const RAW_API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api/'
+const API_BASE_URL = RAW_API_BASE_URL.endsWith('/') ? RAW_API_BASE_URL : `${RAW_API_BASE_URL}/`
 const api = axios.create({
   baseURL: API_BASE_URL,
   headers: { 'Content-Type': 'application/json' },
@@ -77,7 +78,7 @@ api.interceptors.response.use(
 
 export const checkConnection = async () => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/health`, { 
+    const response = await axios.get(`${API_BASE_URL}health`, { 
       timeout: 3000 
     })
     console.log('🌐 Conexão com backend: OK')

@@ -182,18 +182,20 @@ export default {
     }
 
     const edit = (row) => {
-      form.value = { id: row.id || null, nome: row.nome || '', email: row.email || '', telefone: row.telefone || '' }
+      const id = row.id ?? row.Id ?? row.codg ?? row.Codg
+      form.value = { id, nome: row.nome || row.Nome || '', email: row.email || row.Email || '', telefone: row.telefone || row.Telefone || '' }
       dialogVisible.value = true
     }
 
     const remove = async (row) => {
       if (confirm(`Excluir contato \"${row.nome}\"?`)) {
-        await contatoStore.deleteContato(row.id)
+        const id = row.id ?? row.Id ?? row.codg ?? row.Codg
+        await contatoStore.deleteContato(id)
       }
     }
 
     const save = async () => {
-      const payload = { nome: form.value.nome, email: form.value.email, telefone: form.value.telefone }
+      const payload = { Nome: form.value.nome, Email: form.value.email, Telefone: form.value.telefone }
       if (form.value.id) {
         await contatoStore.updateContato(form.value.id, payload)
       } else {

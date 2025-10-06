@@ -26,10 +26,17 @@ export const useContatoStore = defineStore('contato', () => {
         isAscending: true,
         searchterm: searchterm.value
       })
-      const list = Array.isArray(result) ? result : (result?.contatos || [])
+      const rawList = Array.isArray(result) ? result : (result?.Contatos || result?.contatos || [])
+      const list = (rawList || []).map((c) => ({
+        ...c,
+        id: c?.id ?? c?.Id ?? c?.codg ?? c?.Codg,
+        nome: c?.nome ?? c?.Nome,
+        email: c?.email ?? c?.Email,
+        telefone: c?.telefone ?? c?.Telefone
+      }))
       contatos.value = list
-      totalItems.value = (Array.isArray(result) ? result.length : result?.totalItems) || list.length
-      totalPages.value = (Array.isArray(result) ? 1 : result?.totalPages) || 1
+      totalItems.value = (Array.isArray(result) ? list.length : (result?.TotalItems ?? result?.totalItems ?? list.length))
+      totalPages.value = (Array.isArray(result) ? 1 : (result?.TotalPages ?? result?.totalPages ?? 1))
     } catch (err) {
       error.value = err.response?.data?.message || 'Erro ao carregar contatos'
       throw err

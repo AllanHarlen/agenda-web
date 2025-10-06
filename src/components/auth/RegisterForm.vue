@@ -30,7 +30,7 @@
               </span>
               <Password 
                 id="password"
-                v-model="userData.password"
+                v-model="userData.senha"
                 placeholder="Sua senha"
                 class="w-full input-lg"
                 :class="{ 'p-invalid': errors.password }"
@@ -132,15 +132,21 @@ export default {
           login: userData.login,
           senha: userData.senha
         })
-        
+
+        // Login automático após registro
+        await authStore.login({
+          login: userData.login,
+          senha: userData.senha
+        })
+
         toast.add({
           severity: 'success',
           summary: 'Conta criada!',
-          detail: 'Sua conta foi criada com sucesso!',
+          detail: 'Sua conta foi criada e você foi autenticado.',
           life: 3000
         })
 
-        router.push('/login')
+        router.push({ name: 'dashboard' })
       } catch (error) {
         toast.add({
           severity: 'error',

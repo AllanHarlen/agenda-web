@@ -125,6 +125,11 @@ export default {
 
     const helpVisible = ref(false)
 
+    // Garante usuário preenchido ao carregar app
+    if (!authStore.isAuthenticated) {
+      authStore.initAuth()
+    }
+
     return { authStore, isActive, logout, userInitials, helpVisible }
   }
 }
