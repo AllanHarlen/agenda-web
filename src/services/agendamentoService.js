@@ -8,9 +8,9 @@ export const agendamentoService = {
   },
 
   // Lista paginada
-  async getPaged({ pageNumber = 1, pageSize = 10, searchProperty = 'Dscr', orderByProperty = 'Codg', isAscending = true } = {}) {
+  async getPaged({ pageNumber = 1, pageSize = 10, searchProperty = 'Dscr', orderByProperty = 'Codg', isAscending = true, searchterm = '' } = {}) {
     const response = await api.get('/api/Agendamento/ListarAgendamentosPaginados', {
-      params: { pageNumber, pageSize, searchProperty, orderByProperty, isAscending }
+      params: { pageNumber, pageSize, searchProperty, orderByProperty, isAscending, searchterm }
     })
     return response.data
   },

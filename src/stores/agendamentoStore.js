@@ -10,6 +10,7 @@ export const useAgendamentoStore = defineStore('agendamento', () => {
   const pageSize = ref(10)
   const loading = ref(false)
   const error = ref(null)
+  const searchterm = ref('')
 
   const calendar = ref({ startDate: null, endDate: null, events: [] })
 
@@ -22,7 +23,8 @@ export const useAgendamentoStore = defineStore('agendamento', () => {
         pageSize: pageSize.value,
         searchProperty: 'Dscr',
         orderByProperty: 'Codg',
-        isAscending: true
+        isAscending: true,
+        searchterm: searchterm.value
       })
       agendamentos.value = result.agendamentos || []
       totalItems.value = result.totalItems || agendamentos.value.length
@@ -33,6 +35,12 @@ export const useAgendamentoStore = defineStore('agendamento', () => {
     } finally {
       loading.value = false
     }
+  }
+
+  const setSearchTerm = async (term) => {
+    pageNumber.value = 1
+    searchterm.value = term || ''
+    await loadAgendamentos()
   }
 
   const addAgendamento = async (payload) => {
@@ -78,13 +86,15 @@ export const useAgendamentoStore = defineStore('agendamento', () => {
     pageSize,
     loading,
     error,
+    searchterm,
     calendar,
     loadAgendamentos,
     addAgendamento,
     updateAgendamento,
     deleteAgendamento,
     changePage,
-    loadCalendar
+    loadCalendar,
+    setSearchTerm
   }
 })
 

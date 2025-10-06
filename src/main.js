@@ -29,6 +29,7 @@ import Calendar from 'primevue/calendar'
 import Tag from 'primevue/tag'
 import Avatar from 'primevue/avatar'
 import SelectButton from 'primevue/selectbutton'
+import AutoComplete from 'primevue/autocomplete'
 
 const app = createApp(App)
 const pinia = createPinia()
@@ -75,6 +76,7 @@ app.component('Calendar', Calendar)
 app.component('Tag', Tag)
 app.component('Avatar', Avatar)
 app.component('SelectButton', SelectButton)
+app.component('AutoComplete', AutoComplete)
 
 // Inicializa autenticação persistida
 import { useAuthStore } from './stores/authStore'

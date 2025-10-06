@@ -8,9 +8,9 @@ export const contatoService = {
   },
 
   // Lista contatos paginados conforme especificação
-  async getPaged({ pageNumber = 1, pageSize = 10, searchProperty = 'Nome', orderByProperty = 'Codg', isAscending = true } = {}) {
+  async getPaged({ pageNumber = 1, pageSize = 10, searchProperty = 'Nome', orderByProperty = 'Codg', isAscending = true, searchterm = '' } = {}) {
     const response = await api.get('/api/Contato/ListarContatosPaginados', {
-      params: { pageNumber, pageSize, searchProperty, orderByProperty, isAscending }
+      params: { pageNumber, pageSize, searchProperty, orderByProperty, isAscending, searchterm }
     })
     return response.data
   },

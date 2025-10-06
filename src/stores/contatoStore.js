@@ -10,6 +10,7 @@ export const useContatoStore = defineStore('contato', () => {
   const pageSize = ref(10)
   const loading = ref(false)
   const error = ref(null)
+  const searchterm = ref('')
 
   const filteredContatos = computed(() => contatos.value)
 
@@ -22,7 +23,8 @@ export const useContatoStore = defineStore('contato', () => {
         pageSize: pageSize.value,
         searchProperty: 'Nome',
         orderByProperty: 'Codg',
-        isAscending: true
+        isAscending: true,
+        searchterm: searchterm.value
       })
       const list = Array.isArray(result) ? result : (result?.contatos || [])
       contatos.value = list
@@ -34,6 +36,12 @@ export const useContatoStore = defineStore('contato', () => {
     } finally {
       loading.value = false
     }
+  }
+
+  const setSearchTerm = async (term) => {
+    pageNumber.value = 1
+    searchterm.value = term || ''
+    await loadContatos()
   }
 
   const addContato = async (contato) => {
@@ -117,6 +125,7 @@ export const useContatoStore = defineStore('contato', () => {
     totalPages,
     pageNumber,
     pageSize,
+    searchterm,
     filteredContatos,
     loading,
     error,
@@ -125,6 +134,7 @@ export const useContatoStore = defineStore('contato', () => {
     updateContato,
     deleteContato,
     searchContatos,
-    changePage
+    changePage,
+    setSearchTerm
   }
 })

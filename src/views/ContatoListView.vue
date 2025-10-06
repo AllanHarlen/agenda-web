@@ -1,16 +1,34 @@
 <template>
   <div class="contato-list-view">
-    <Toolbar class="toolbar">
+    <Toolbar class="toolbar brand-toolbar">
       <template #start>
-        <span class="text-2xl font-bold text-white">📒 Contatos</span>
+        <div class="flex align-items-center gap-3 toolbar-title">
+          <i class="pi pi-users"></i>
+          <span>Contatos</span>
+        </div>
       </template>
       <template #end>
-        <Button icon="pi pi-plus" label="Novo" class="p-button-success" @click="openNew" />
-        <Button icon="pi pi-refresh" class="p-button-text ml-2" :loading="loading" @click="loadContatos" />
+        <div class="flex align-items-center gap-3 toolbar-search">
+          <span class="hidden sm:inline">Pesquisar:</span>
+          <span class="p-input-icon-left">
+            <i class="pi pi-search gap-3" />
+            <InputText
+              v-model="searchQuery"
+              placeholder="Buscar por nome/email/telefone..."
+              @keyup.enter="applySearch"
+              :disabled="loading"
+              style="width: 260px"
+            />
+          </span>
+          <Button icon="pi pi-times" class="p-button-text" @click="clearSearch" :disabled="loading || !searchQuery" />
+          <Divider layout="vertical" class="hidden sm:flex" />
+          <Button icon="pi pi-plus" label="Novo" class="p-button-success" @click="openNew" />
+          <Button icon="pi pi-refresh" class="p-button-text" :loading="loading" @click="reload" />
+        </div>
       </template>
     </Toolbar>
 
-    <Card class="main-card mt-2">
+    <Card class="main-card mt-2 elevated-card brand-datatable">
       <template #content>
         <DataTable
           :value="contatoStore.contatos"
@@ -24,25 +42,36 @@
           currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} contatos"
           :loading="loading"
           @page="contatoStore.changePage"
+          responsiveLayout="scroll"
+          dataKey="id"
         >
           <Column field="nome" header="Nome">
             <template #body="{ data }">
-              <span class="font-semibold">{{ data.nome }}</span>
+              <div class="flex align-items-center gap-2">
+                <i class="pi pi-user text-color-secondary"></i>
+                <span class="font-semibold">{{ data.nome }}</span>
+              </div>
             </template>
           </Column>
           <Column field="email" header="Email">
             <template #body="{ data }">
-              <a :href="`mailto:${data.email}`" class="text-primary hover:underline">{{ data.email || '-' }}</a>
+              <div class="flex align-items-center gap-2">
+                <i class="pi pi-envelope text-color-secondary"></i>
+                <a :href="`mailto:${data.email}`" class="text-primary hover:underline">{{ data.email || '-' }}</a>
+              </div>
             </template>
           </Column>
           <Column field="telefone" header="Telefone">
             <template #body="{ data }">
-              <a :href="`tel:${data.telefone}`" class="text-primary hover:underline">{{ formatTelefone(data.telefone) || '-' }}</a>
+              <div class="flex align-items-center gap-2">
+                <i class="pi pi-phone text-color-secondary"></i>
+                <a :href="`tel:${data.telefone}`" class="text-primary hover:underline">{{ formatTelefone(data.telefone) || '-' }}</a>
+              </div>
             </template>
           </Column>
-          <Column header="Ações">
+          <Column header="Ações" style="width: 140px">
             <template #body="{ data }">
-              <div class="flex gap-2">
+              <div class="flex gap-2 justify-content-end">
                 <Button icon="pi pi-pencil" class="p-button-text p-button-success" @click="edit(data)" />
                 <Button icon="pi pi-trash" class="p-button-text p-button-danger" @click="remove(data)" />
               </div>
@@ -66,8 +95,13 @@
       </template>
     </Card>
 
-    <Dialog v-model:visible="dialogVisible" :modal="true" :style="{ width: '520px' }">
-      <template #header>{{ formTitle }}</template>
+    <Dialog v-model:visible="dialogVisible" :modal="true" :style="{ width: '520px' }" class="dialog-brand">
+      <template #header>
+        <div class="dialog-title">
+          <i class="pi pi-user-plus"></i>
+          <span>{{ formTitle }}</span>
+        </div>
+      </template>
       <div class="p-fluid">
         <div class="field">
           <label>Nome</label>
@@ -107,6 +141,7 @@ export default {
     const dialogVisible = ref(false)
     const form = ref({ id: null, nome: '', email: '', telefone: '' })
     const loading = computed(() => contatoStore.loading)
+    const searchQuery = ref(contatoStore.searchterm || '')
     const formTitle = computed(() => (form.value.id ? 'Editar Contato' : 'Novo Contato'))
 
     const loadContatos = async () => {
@@ -120,6 +155,27 @@ export default {
       }
     }
 
+    const applySearch = async () => {
+      try {
+        await contatoStore.setSearchTerm(searchQuery.value)
+      } catch (error) {
+        if (error.response?.status === 401) {
+          authStore.logout()
+          router.push('/login')
+        }
+      }
+    }
+
+    const clearSearch = async () => {
+      if (!searchQuery.value) return
+      searchQuery.value = ''
+      await applySearch()
+    }
+
+    const reload = async () => {
+      await loadContatos()
+    }
+
     const openNew = () => {
       form.value = { id: null, nome: '', email: '', telefone: '' }
       dialogVisible.value = true
@@ -131,7 +187,7 @@ export default {
     }
 
     const remove = async (row) => {
-      if (confirm(`Excluir contato "${row.nome}"?`)) {
+      if (confirm(`Excluir contato \"${row.nome}\"?`)) {
         await contatoStore.deleteContato(row.id)
       }
     }
@@ -166,11 +222,66 @@ export default {
       await loadContatos()
     })
 
-    return { contatoStore, authStore, dialogVisible, form, loading, formTitle, loadContatos, openNew, edit, remove, save, formatTelefone }
+    return { contatoStore, authStore, dialogVisible, form, loading, formTitle, searchQuery, loadContatos, openNew, edit, remove, save, formatTelefone, applySearch, clearSearch, reload }
   }
 }
 </script>
 
 <style scoped>
 .main-card { margin-top: 1rem; }
+
+/* Toolbar gradiente compatível com Sidebar */
+.brand-toolbar :deep(.p-toolbar) {
+  background: linear-gradient(135deg, #225c5a 0%, #73a9a7 100%);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 0.5rem 1rem;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+
+/* Título com ícone em preto e maior espaçamento */
+.toolbar-title {
+  color: #000;
+}
+.toolbar-title i {
+  color: #000;
+}
+
+/* Área de pesquisa com texto e ícone pretos */
+.toolbar-search {
+  color: #000;
+}
+.toolbar-search i {
+  color: #000;
+}
+
+/* Cartão elevado e DataTable refinado */
+.elevated-card :deep(.p-card) {
+  border-radius: 12px;
+  border: 1px solid rgba(2, 6, 23, 0.06);
+  box-shadow: 0 6px 18px rgba(2, 6, 23, 0.06);
+}
+.brand-datatable :deep(.p-datatable-thead > tr > th) {
+  background: #F8FAFC;
+  color: #475569;
+}
+.brand-datatable :deep(.p-datatable-tbody > tr:hover) {
+  background: rgba(34, 92, 90, 0.06);
+}
+.brand-datatable :deep(.p-paginator) {
+  border-top: 1px solid rgba(2, 6, 23, 0.06);
+}
+
+/* Diálogo com header temático */
+.dialog-brand :deep(.p-dialog-header) {
+  border-bottom: 1px solid rgba(2, 6, 23, 0.06);
+  padding: 0.75rem 1rem;
+}
+.dialog-brand .dialog-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+}
 </style>
