@@ -12,7 +12,7 @@
         to="/dashboard"
       >
         <i class="pi pi-chart-line"></i>
-        <span>Dashboard</span>
+        <span>Calendário</span>
       </router-link>
 
       <router-link 

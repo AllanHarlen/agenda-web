@@ -113,7 +113,8 @@
 </template>
 
 <script>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
+import agendamentoService from '@/services/agendamentoService'
 
 export default {
   name: 'DashboardView',
@@ -121,14 +122,8 @@ export default {
     const selectedDate = ref(new Date())
     const hoveredEventDate = ref(null)
 
-    const appointments = ref([
-      { title: 'Reunião com Maria', date: addDays(new Date(), 1), type: 'Reunião', location: 'Escritório' },
-      { title: 'Chamada com João', date: addDays(new Date(), 2), type: 'Chamada', location: 'Remoto' },
-      { title: 'Visita ao cliente ACME', date: addDays(new Date(), 4), type: 'Visita', location: 'Cliente' },
-      { title: 'Revisão de proposta', date: addDays(new Date(), 7), type: 'Revisão', location: 'Remoto' },
-      { title: 'Demo do produto', date: addDays(new Date(), 10), type: 'Demo', location: 'Cliente' },
-      { title: 'Onboarding novo cliente', date: addDays(new Date(), 15), type: 'Onboarding', location: 'Remoto' }
-    ])
+    // Dados vindos da API
+    const appointments = ref([])
 
     const period = ref({ label: '7 dias', value: 7 })
     const periodOptions = ref([
@@ -267,6 +262,52 @@ export default {
       onDayHover(date)
     }
 
+    // Normaliza e carrega dados do calendário via API
+    async function loadCalendarFromApi() {
+      const days = period.value?.value ?? 7
+      const data = await agendamentoService.getCalendar({ days })
+      // Esperando estrutura: { startDate, endDate, events: [{ date, time, title, description, contatoNome, type, location }] }
+      const normalized = Array.isArray(data?.events) ? data.events.map(ev => {
+        const dateStr = ev.date || ev.data || ev.Data || ''
+        const timeStr = ev.time || ev.hora || ev.Hora || ''
+        const dateTime = buildDateFromParts(dateStr, timeStr)
+        return {
+          title: ev.title || ev.Titulo || ev.titulo || ev.description || 'Agendamento',
+          date: dateTime,
+          type: ev.type || ev.Tipo || '',
+          location: ev.location || ev.local || ev.Local || ''
+        }
+      }) : []
+      appointments.value = normalized
+    }
+
+    function buildDateFromParts(datePart, timePart) {
+      // Aceita ISO ("2025-10-06"), BR ("06/10/2025"), e junta com hora "HH:mm" se existir
+      if (!datePart) return new Date()
+      let base
+      if (/^\d{4}-\d{2}-\d{2}/.test(String(datePart))) {
+        base = new Date(datePart)
+      } else if (/^\d{2}\/\d{2}\/\d{4}$/.test(String(datePart))) {
+        const [d, m, y] = String(datePart).split('/')
+        base = new Date(Number(y), Number(m) - 1, Number(d))
+      } else {
+        base = new Date(datePart)
+      }
+      if (timePart && /^\d{2}:\d{2}/.test(String(timePart))) {
+        const [hh, mm] = String(timePart).split(':').map(n => Number(n))
+        base.setHours(hh || 0, mm || 0, 0, 0)
+      }
+      return base
+    }
+
+    onMounted(() => {
+      loadCalendarFromApi().catch(() => { /* erros tratados globalmente */ })
+    })
+
+    watch(period, () => {
+      loadCalendarFromApi().catch(() => { /* erros tratados globalmente */ })
+    })
+
     function tagSeverity(type) {
       switch ((type || '').toLowerCase()) {
         case 'reunião': return 'info'
@@ -361,8 +402,6 @@ export default {
 .custom-day.is-hover {
   box-shadow: 0 0 0 2px var(--primary-700) inset;
 }
-
-.custom-day.in-range:not(.has-event) { }
 
 .custom-day.is-hover.has-event::after {
   background: var(--primary-700);
