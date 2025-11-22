@@ -6,31 +6,71 @@
     </div>
 
     <nav class="sidebar-menu">
-      <router-link 
-        class="menu-item" 
-        :class="{ active: isActive('/dashboard') }" 
+      <router-link
+        class="menu-item"
+        :class="{ active: isActive('/dashboard') }"
         to="/dashboard"
       >
         <i class="pi pi-chart-line"></i>
         <span>Calendário</span>
       </router-link>
 
-      <router-link 
-        class="menu-item" 
-        :class="{ active: isActive('/contatos') }" 
+      <router-link
+        class="menu-item"
+        :class="{ active: isActive('/contatos') }"
         to="/contatos"
       >
         <i class="pi pi-users"></i>
         <span>Contatos</span>
       </router-link>
 
-      <router-link 
-        class="menu-item" 
-        :class="{ active: isActive('/agendamentos') }" 
+      <router-link
+        class="menu-item"
+        :class="{ active: isActive('/agendamentos') }"
         to="/agendamentos"
       >
         <i class="pi pi-calendar"></i>
         <span>Agendamentos</span>
+      </router-link>
+
+      <div class="menu-divider">Gestão</div>
+
+      <router-link
+        class="menu-item"
+        :class="{ active: isActive('/patrimonios') }"
+        to="/patrimonios"
+      >
+        <i class="pi pi-building"></i>
+        <span>Patrimônios</span>
+      </router-link>
+
+      <router-link
+        class="menu-item"
+        :class="{ active: isActive('/afiliados') }"
+        to="/afiliados"
+      >
+        <i class="pi pi-id-card"></i>
+        <span>Afiliados</span>
+      </router-link>
+
+      <router-link
+        class="menu-item"
+        :class="{ active: isActive('/equipamentos') }"
+        to="/equipamentos"
+      >
+        <i class="pi pi-desktop"></i>
+        <span>Equipamentos</span>
+      </router-link>
+
+      <div class="menu-divider">Área do Associado</div>
+
+      <router-link
+        class="menu-item"
+        :class="{ active: isActive('/financeiro') }"
+        to="/financeiro"
+      >
+        <i class="pi pi-wallet"></i>
+        <span>Financeiro</span>
       </router-link>
     </nav>
 
@@ -199,6 +239,18 @@ export default {
 
 .menu-item:active {
   transform: translateY(1px);
+}
+
+.menu-divider {
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  padding: 0.5rem 0.85rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  opacity: 0.7;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .sidebar-footer {
