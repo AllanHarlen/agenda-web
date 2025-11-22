@@ -1,24 +1,43 @@
 <template>
   <div class="login-container">
+    <Button
+      icon="pi pi-arrow-left"
+      class="back-button"
+      rounded
+      text
+      @click="$router.push('/')"
+      v-tooltip.bottom="'Voltar para página inicial'"
+    />
+
     <div class="left-side">
       <div class="left-content">
-        <div class="logo" />
+        <div class="logo">
+          <img src="/logo.svg" alt="ASPJ-PE Logo" class="logo-img" />
+        </div>
         <h1 class="left-title">
           Bem-vindo ao<br/>
-          Agenda Pessoal
+          ASPJ-PE
         </h1>
         <h2 class="left-subtitle">
-          Organize compromissos, reuniões e tarefas com praticidade.<br/>
-          Visualização diária, semanal e mensal para máxima clareza.<br/>
-          Notificações inteligentes para não perder nenhum horário.
+          Associação dos Servidores do Poder Judiciário de Pernambuco
         </h2>
-        <h2 class="left-subtitle">Seu tempo, sob controle.</h2>
+        <h2 class="left-subtitle">Desde 1957 unindo servidores e fortalecendo direitos</h2>
       </div>
     </div>
     <div class="right-side">
       <div class="form-container">
         <h1 class="form-title">LOGIN</h1>
         <LoginForm />
+        <div class="register-section">
+          <Divider />
+          <p class="register-text">Não é associado?</p>
+          <Button
+            label="Associe-se"
+            class="btn-associe-full"
+            outlined
+            @click="$router.push('/pre-cadastro')"
+          />
+        </div>
       </div>
     </div>
     <NotificationToast />
@@ -44,45 +63,65 @@ export default {
   display: flex;
   height: 100vh;
   background-color: #73a9a7;
+  position: relative;
+}
+
+.back-button {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.9) !important;
+  color: #225c5a !important;
+  width: 3rem;
+  height: 3rem;
+}
+
+.back-button:hover {
+  background: white !important;
 }
 
 .left-side {
   flex: 1;
-  background-image: url('/background-login.png');
-  background-repeat: no-repeat;
-  background-position: center;
+  background: linear-gradient(135deg, #225c5a 0%, #73a9a7 100%);
   display: flex;
   flex-direction: column;
+  justify-content: center;
 }
 
 .left-content {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 2rem;
 }
 
 .logo {
-  width: 350px;
-  height: 300px;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  margin-left: 45px;
-  background: url('logo-background.png') no-repeat center;
-  background-size: contain;
+  margin-bottom: 2rem;
+}
+
+.logo-img {
+  width: 200px;
+  height: auto;
 }
 
 .left-title {
   font-family: 'Poppins', sans-serif;
-  font-size: 64px;
+  font-size: 3rem;
   color: #ffffff;
-  margin-left: 95px;
-  text-align: left;
+  margin-bottom: 1rem;
+  text-align: center;
+  line-height: 1.2;
 }
 
 .left-subtitle {
   font-family: 'Poppins', sans-serif;
-  font-size: 18px;
+  font-size: 1.2rem;
   color: #ffffff;
-  margin-left: 95px;
+  margin: 0.5rem 0;
+  text-align: center;
+  max-width: 600px;
 }
 
 .right-side {
@@ -97,7 +136,6 @@ export default {
 .form-container {
   max-width: 460px;
   width: 100%;
-  height: 400px;
   padding: 3rem;
   display: flex;
   flex-direction: column;
@@ -110,6 +148,29 @@ export default {
   text-align: center;
   margin-bottom: 2rem;
   color: #73a9a7;
+  font-size: 2rem;
+}
+
+.register-section {
+  width: 100%;
+  margin-top: 1.5rem;
+  text-align: center;
+}
+
+.register-text {
+  margin: 1rem 0;
+  color: #666;
+  font-size: 0.95rem;
+}
+
+.btn-associe-full {
+  width: 100%;
+  border-color: #73a9a7 !important;
+  color: #73a9a7 !important;
+}
+
+.btn-associe-full:hover {
+  background: #73a9a71a !important;
 }
 
 @media (max-width: 768px) {
@@ -118,11 +179,19 @@ export default {
   }
 
   .left-side {
-    height: 50vh;
+    height: 40vh;
+  }
+
+  .left-title {
+    font-size: 2rem;
+  }
+
+  .left-subtitle {
+    font-size: 1rem;
   }
 
   .right-side {
-    height: 100vh;
+    height: 60vh;
     box-shadow: none;
   }
 }
