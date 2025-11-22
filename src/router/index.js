@@ -8,6 +8,9 @@ import ContatoListView from '../views/ContatoListView.vue'
 import DashboardView from '../views/DashboardView.vue'
 import AgendamentoListView from '../views/AgendamentoListView.vue'
 import AgendamentoCalendarView from '../views/AgendamentoCalendarView.vue'
+import PublicHomeView from '../views/PublicHomeView.vue'
+import PreCadastroView from '../views/PreCadastroView.vue'
+import PreCadastroConfirmacaoView from '../views/PreCadastroConfirmacaoView.vue'
 
 // Gestão
 import PatrimonioListView from '../views/PatrimonioListView.vue'
@@ -24,43 +27,56 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    redirect: '/dashboard'
+    component: PublicHomeView,
+    meta: { requiresAuth: false, hideNavbar: true, title: 'ASPJ-PE - Início' }
+  },
+  {
+    path: '/pre-cadastro',
+    name: 'pre-cadastro',
+    component: PreCadastroView,
+    meta: { requiresAuth: false, hideNavbar: true, title: 'Pré-Cadastro - ASPJ-PE' }
+  },
+  {
+    path: '/pre-cadastro/confirmacao',
+    name: 'pre-cadastro-confirmacao',
+    component: PreCadastroConfirmacaoView,
+    meta: { requiresAuth: false, hideNavbar: true, title: 'Confirmação - ASPJ-PE' }
   },
   {
     path: '/dashboard',
     name: 'dashboard',
     component: DashboardView,
-    meta: { requiresAuth: true, title: 'Dashboard - Agenda' }
+    meta: { requiresAuth: true, title: 'Dashboard - ASPJ-PE' }
   },
   {
     path: '/login',
     name: 'login',
     component: LoginView,
-    meta: { requiresAuth: false, hideNavbar: true }
+    meta: { requiresAuth: false, hideNavbar: true, title: 'Login - ASPJ-PE' }
   },
   {
     path: '/register',
     name: 'register',
     component: RegisterView,
-    meta: { requiresAuth: false, hideNavbar: true }
+    meta: { requiresAuth: false, hideNavbar: true, title: 'Registro - ASPJ-PE' }
   },
   {
     path: '/contatos',
     name: 'contatos',
     component: ContatoListView,
-    meta: { requiresAuth: true, title: 'Contatos - Agenda' }
+    meta: { requiresAuth: true, title: 'Contatos - ASPJ-PE' }
   },
   {
     path: '/agendamentos',
     name: 'agendamentos',
     component: AgendamentoListView,
-    meta: { requiresAuth: true, title: 'Agendamentos - Agenda' }
+    meta: { requiresAuth: true, title: 'Agendamentos - ASPJ-PE' }
   },
   {
     path: '/calendario',
     name: 'calendario',
     component: AgendamentoCalendarView,
-    meta: { requiresAuth: true, title: 'Calendário - Agenda' }
+    meta: { requiresAuth: true, title: 'Calendário - ASPJ-PE' }
   },
   // Patrimônios
   {
@@ -161,7 +177,7 @@ router.beforeEach((to, from, next) => {
   if (requiresAuth && !isAuthenticated) {
     next({ name: 'login', query: { redirect: to.fullPath } })
   } else if ((to.name === 'login' || to.name === 'register') && isAuthenticated) {
-    next({ name: 'contatos' })
+    next({ name: 'dashboard' })
   } else {
     next()
   }
@@ -169,7 +185,7 @@ router.beforeEach((to, from, next) => {
 
 // Atualizar título da página
 router.afterEach((to) => {
-  const title = to.meta.title || 'Agenda Blue Technology'
+  const title = to.meta.title || 'ASPJ-PE - Associação dos Servidores do Poder Judiciário de Pernambuco'
   document.title = title
 })
 

@@ -1,18 +1,20 @@
 <template>
   <aside class="app-sidebar">
     <div class="sidebar-header">
-      <i class="pi pi-calendar mr-2"></i>
-      <span class="brand">Agenda</span>
+      <img src="/logo.svg" alt="ASPJ-PE Logo" class="sidebar-logo" />
+      <span class="brand">ASPJ-PE</span>
     </div>
 
     <nav class="sidebar-menu">
+      <div class="menu-section-title">Gestão</div>
+
       <router-link
         class="menu-item"
         :class="{ active: isActive('/dashboard') }"
         to="/dashboard"
       >
-        <i class="pi pi-chart-line"></i>
-        <span>Calendário</span>
+        <i class="pi pi-home"></i>
+        <span>Dashboard</span>
       </router-link>
 
       <router-link
@@ -72,6 +74,20 @@
         <i class="pi pi-wallet"></i>
         <span>Financeiro</span>
       </router-link>
+      <div class="social-links">
+        <a href="https://www.facebook.com/ASPJ.PE" target="_blank" rel="noopener noreferrer" class="social-icon" title="Facebook">
+          <i class="pi pi-facebook"></i>
+        </a>
+        <a href="https://x.com/aspj_pe" target="_blank" rel="noopener noreferrer" class="social-icon" title="Twitter">
+          <i class="pi pi-twitter"></i>
+        </a>
+        <a href="https://www.youtube.com/channel/UC5SlyMrhuZVbUhIgSPrGPFQ" target="_blank" rel="noopener noreferrer" class="social-icon" title="YouTube">
+          <i class="pi pi-youtube"></i>
+        </a>
+        <a href="https://www.instagram.com/aspj.pe/" target="_blank" rel="noopener noreferrer" class="social-icon" title="Instagram">
+          <i class="pi pi-instagram"></i>
+        </a>
+      </div>
     </nav>
 
     <div class="sidebar-footer" v-if="authStore.isAuthenticated">
@@ -82,6 +98,14 @@
           <div class="email" :title="authStore.user?.email">{{ authStore.user?.email }}</div>
           <Tag v-if="authStore.user?.perfil" :value="authStore.user.perfil" severity="secondary" class="user-role" />
         </div>
+        <Button
+          icon="pi pi-user-edit"
+          rounded
+          text
+          class="edit-profile-btn"
+          v-tooltip.left="'Editar Perfil'"
+          @click="editProfile"
+        />
       </div>
       <Button 
         icon="pi pi-sign-out" 
@@ -91,7 +115,7 @@
         @click="logout"
       />
       <div class="mini-footer">
-        <span class="version">Agenda v1.0</span>
+        <span class="version">ASPJ-PE v1.0</span>
         <a href="#" class="help-link" @click.prevent="helpVisible = true">
           <i class="pi pi-question-circle mr-1"></i>
           Ajuda
@@ -155,6 +179,11 @@ export default {
       router.push('/login')
     }
 
+    const editProfile = () => {
+      // TODO: Navigate to profile edit page when implemented
+      alert('Funcionalidade de edição de perfil será implementada em breve')
+    }
+
     const userInitials = computed(() => {
       const name = (authStore.user?.nome || '').trim()
       if (!name) return ''
@@ -170,7 +199,7 @@ export default {
       authStore.initAuth()
     }
 
-    return { authStore, isActive, logout, userInitials, helpVisible }
+    return { authStore, isActive, logout, editProfile, userInitials, helpVisible }
   }
 }
 </script>
@@ -191,9 +220,17 @@ export default {
 .sidebar-header {
   display: flex;
   align-items: center;
+  gap: 0.75rem;
   font-weight: 700;
   font-size: 1.1rem;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.sidebar-logo {
+  width: 40px;
+  height: auto;
 }
 
 .brand {
@@ -204,6 +241,17 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+}
+
+.menu-section-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  opacity: 0.8;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  padding-left: 0.85rem;
 }
 
 .menu-item {
@@ -251,6 +299,24 @@ export default {
   letter-spacing: 0.5px;
   opacity: 0.7;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+.social-links {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  padding: 1rem 0.85rem;
+  margin-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.social-icon {
+  color: white;
+  font-size: 1.2rem;
+  transition: transform 0.2s, opacity 0.2s;
+}
+
+.social-icon:hover {
+  transform: scale(1.15);
+  opacity: 0.8;
 }
 
 .sidebar-footer {
@@ -264,6 +330,16 @@ export default {
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  position: relative;
+}
+
+.edit-profile-btn {
+  margin-left: auto;
+  color: white !important;
+}
+
+.edit-profile-btn:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
 }
 
 .user-box .info {
