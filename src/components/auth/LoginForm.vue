@@ -47,19 +47,13 @@
             </div>
           </div>
 
-          <Button 
-            type="submit" 
-            label="Entrar" 
-            class="w-full btn-lg" 
+          <Button
+            type="submit"
+            label="Entrar"
+            class="w-full btn-lg"
             :loading="loading"
             :disabled="loading"
           />
-
-          <Divider />
-
-          <div class="text-center register-link">
-            <p>Não tem conta? <router-link to="/register" class="text-primary">Criar conta</router-link></p>
-          </div>
         </form>
       </template>
     </Card>
@@ -125,7 +119,7 @@ export default {
           life: 3000
         })
 
-        router.push('/contatos')
+        router.push('/dashboard')
       } catch (error) {
         // MELHORIA: Log detalhado do erro
         console.error('Erro completo no login:', error)
@@ -211,12 +205,5 @@ export default {
 
 .remember-text {
   font-size: 0.95rem;
-}
-
-.register-link :deep(a) {
-  color: #73a9a7;
-}
-.register-link :deep(a:hover) {
-  color: #5f9593;
 }
 </style>
