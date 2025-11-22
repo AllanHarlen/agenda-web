@@ -12,6 +12,17 @@ import PublicHomeView from '../views/PublicHomeView.vue'
 import PreCadastroView from '../views/PreCadastroView.vue'
 import PreCadastroConfirmacaoView from '../views/PreCadastroConfirmacaoView.vue'
 
+// Gestão
+import PatrimonioListView from '../views/PatrimonioListView.vue'
+import PatrimonioFormView from '../views/PatrimonioFormView.vue'
+import AfiliadoListView from '../views/AfiliadoListView.vue'
+import AfiliadoFormView from '../views/AfiliadoFormView.vue'
+import EquipamentoListView from '../views/EquipamentoListView.vue'
+import EquipamentoFormView from '../views/EquipamentoFormView.vue'
+
+// Área do Associado
+import FinanceiroView from '../views/FinanceiroView.vue'
+
 const routes = [
   {
     path: '/',
@@ -66,6 +77,77 @@ const routes = [
     name: 'calendario',
     component: AgendamentoCalendarView,
     meta: { requiresAuth: true, title: 'Calendário - ASPJ-PE' }
+  },
+  // Patrimônios
+  {
+    path: '/patrimonios',
+    name: 'patrimonios',
+    component: PatrimonioListView,
+    meta: { requiresAuth: true, title: 'Patrimônios - Agenda' }
+  },
+  {
+    path: '/patrimonios/novo',
+    name: 'patrimonio-novo',
+    component: PatrimonioFormView,
+    meta: { requiresAuth: true, title: 'Novo Patrimônio - Agenda' }
+  },
+  {
+    path: '/patrimonios/editar/:id',
+    name: 'patrimonio-editar',
+    component: PatrimonioFormView,
+    meta: { requiresAuth: true, title: 'Editar Patrimônio - Agenda' }
+  },
+  // Afiliados
+  {
+    path: '/afiliados',
+    name: 'afiliados',
+    component: AfiliadoListView,
+    meta: { requiresAuth: true, title: 'Afiliados - Agenda' }
+  },
+  {
+    path: '/afiliados/novo',
+    name: 'afiliado-novo',
+    component: AfiliadoFormView,
+    meta: { requiresAuth: true, title: 'Novo Afiliado - Agenda' }
+  },
+  {
+    path: '/afiliados/editar/:id',
+    name: 'afiliado-editar',
+    component: AfiliadoFormView,
+    meta: { requiresAuth: true, title: 'Editar Afiliado - Agenda' }
+  },
+  // Equipamentos
+  {
+    path: '/equipamentos',
+    name: 'equipamentos',
+    component: EquipamentoListView,
+    meta: { requiresAuth: true, title: 'Equipamentos - Agenda' }
+  },
+  {
+    path: '/equipamentos/novo',
+    name: 'equipamento-novo',
+    component: EquipamentoFormView,
+    meta: { requiresAuth: true, title: 'Novo Equipamento - Agenda' }
+  },
+  {
+    path: '/equipamentos/editar/:id',
+    name: 'equipamento-editar',
+    component: EquipamentoFormView,
+    meta: { requiresAuth: true, title: 'Editar Equipamento - Agenda' }
+  },
+  // Área Pública
+  {
+    path: '/associe-se',
+    name: 'associe-se',
+    component: AfiliadoFormView,
+    meta: { requiresAuth: false, hideNavbar: true, title: 'Associe-se - Agenda' }
+  },
+  // Área do Associado
+  {
+    path: '/financeiro',
+    name: 'financeiro',
+    component: FinanceiroView,
+    meta: { requiresAuth: true, title: 'Área Financeira - Agenda' }
   },
   {
     path: '/:pathMatch(.*)*',
